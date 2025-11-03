@@ -1,12 +1,15 @@
 import java.awt.Color;
 import java.awt.FlowLayout;
 
+import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 
 public class EditorFrame extends JFrame{
 	
 	int WIDTH = 885;
 	int HEIGHT = 674;
+	
+	ImageIcon icon = new ImageIcon("notepad.png");
 	
 	EditorFrame() {
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -17,6 +20,7 @@ public class EditorFrame extends JFrame{
 		this.setResizable(false);
 		this.setLayout(new FlowLayout());
 		this.setLocationRelativeTo(null);
+		this.setIconImage(icon.getImage());
 		
 		
 		this.setVisible(true);
