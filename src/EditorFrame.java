@@ -12,6 +12,8 @@ import javax.swing.JTextArea;
 public class EditorFrame extends JFrame implements ActionListener{
 
 	JTextArea textArea;
+    JScrollPane scrollPane;
+
     int WIDTH = 885;
     int HEIGHT = 674;
     String []fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
@@ -36,6 +38,12 @@ public class EditorFrame extends JFrame implements ActionListener{
 		textArea.setBorder(null);
 		textArea.setFont(new Font("Arial",Font.PLAIN,16));
 
+        scrollPane = new JScrollPane(textArea);
+        scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+        scrollPane.setPreferredSize(new Dimension(WIDTH,HEIGHT));
+        scrollPane.setBorder(null);
+
+        this.add(scrollPane);
         this.setVisible(true);
 
     }
