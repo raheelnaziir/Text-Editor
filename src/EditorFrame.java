@@ -1,11 +1,17 @@
 import java.awt.Color;
 import java.awt.FlowLayout;
+import java.awt.Font;
+import java.awt.GraphicsEnvironment;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
+import javax.swing.JTextArea;
 
 public class EditorFrame extends JFrame implements ActionListener{
 
+	JTextArea textArea;
     int WIDTH = 885;
     int HEIGHT = 674;
     String []fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
@@ -23,16 +29,23 @@ public class EditorFrame extends JFrame implements ActionListener{
         this.setLocationRelativeTo(null);
         this.setIconImage(icon.getImage());
 
+        
+        textArea = new JTextArea();
+		textArea.setLineWrap(true);
+		textArea.setWrapStyleWord(true);
+		textArea.setBorder(null);
+		textArea.setFont(new Font("Arial",Font.PLAIN,16));
 
         this.setVisible(true);
 
     }
 
-    @Override
-    public void actionPerformed(ActionEvent e) {
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		// TODO Auto-generated method stub
+		
+	}
 
-
-    }
 
 
 
