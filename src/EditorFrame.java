@@ -43,6 +43,7 @@ public class EditorFrame extends JFrame implements ActionListener{
         scrollPane.setPreferredSize(new Dimension(WIDTH,HEIGHT));
         scrollPane.setBorder(null);
 
+
         this.add(scrollPane);
         this.setVisible(true);
 
