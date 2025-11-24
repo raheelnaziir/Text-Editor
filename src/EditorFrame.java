@@ -16,6 +16,9 @@ public class EditorFrame extends JFrame implements ActionListener{
 
 	JTextArea textArea;
     JScrollPane scrollPane;
+    JComboBox fontPicker;
+    JSpinner spinnerFont;
+    UndoManager undoManager;
 
     int WIDTH = 885;
     int HEIGHT = 674;
@@ -41,11 +44,32 @@ public class EditorFrame extends JFrame implements ActionListener{
 		textArea.setBorder(null);
 		textArea.setFont(new Font("Arial",Font.PLAIN,16));
 
+        undoManager = new UndoManager();
+        textArea.getDocument().addUndoableEditListener(undoManager);
+
         scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setPreferredSize(new Dimension(WIDTH,HEIGHT));
         scrollPane.setBorder(null);
 
+
+        spinnerFont = new JSpinner();
+        spinnerFont.setValue(18);
+        spinnerFont.setPreferredSize(new Dimension(50,25));
+        spinnerFont.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+
+                textArea.setFont(new Font(textArea.getFont().getFamily(), Font.PLAIN,(int) spinnerFont.getValue()));
+            }
+
+        });
+
+        fontPicker = new JComboBox(fonts);
+        fontPicker.addActionListener(this);
+        fontPicker.setBackground(Color.WHITE);
+        fontPicker.setSelectedItem("Arial");
 
         this.add(scrollPane);
         this.setVisible(true);
@@ -54,7 +78,11 @@ public class EditorFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+
+
+        if(e.getSource()==fontPicker) {
+            textArea.setFont(new Font((String)fontPicker.getSelectedItem(),Font.PLAIN,textArea.getFont().getSize()));
+        }
 		
 	}
 
