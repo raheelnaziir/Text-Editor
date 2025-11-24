@@ -13,6 +13,8 @@ public class EditorFrame extends JFrame implements ActionListener{
 
 	JTextArea textArea;
     JScrollPane scrollPane;
+    JComboBox fontPicker;
+
 
     int WIDTH = 885;
     int HEIGHT = 674;
@@ -43,6 +45,10 @@ public class EditorFrame extends JFrame implements ActionListener{
         scrollPane.setPreferredSize(new Dimension(WIDTH,HEIGHT));
         scrollPane.setBorder(null);
 
+        fontPicker = new JComboBox(fonts);
+        fontPicker.addActionListener(this);
+        fontPicker.setBackground(Color.WHITE);
+        fontPicker.setSelectedItem("Arial");
 
         this.add(scrollPane);
         this.setVisible(true);
