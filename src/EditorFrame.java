@@ -14,7 +14,7 @@ public class EditorFrame extends JFrame implements ActionListener{
 	JTextArea textArea;
     JScrollPane scrollPane;
     JComboBox fontPicker;
-
+    JSpinner spinnerFont;
 
     int WIDTH = 885;
     int HEIGHT = 674;
@@ -44,6 +44,20 @@ public class EditorFrame extends JFrame implements ActionListener{
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
         scrollPane.setPreferredSize(new Dimension(WIDTH,HEIGHT));
         scrollPane.setBorder(null);
+
+
+        spinnerFont = new JSpinner();
+        spinnerFont.setValue(18);
+        spinnerFont.setPreferredSize(new Dimension(50,25));
+        spinnerFont.addChangeListener(new ChangeListener() {
+
+            @Override
+            public void stateChanged(ChangeEvent e) {
+
+                textArea.setFont(new Font(textArea.getFont().getFamily(), Font.PLAIN,(int) spinnerFont.getValue()));
+            }
+
+        });
 
         fontPicker = new JComboBox(fonts);
         fontPicker.addActionListener(this);
