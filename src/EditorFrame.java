@@ -15,6 +15,7 @@ public class EditorFrame extends JFrame implements ActionListener{
     JScrollPane scrollPane;
     JComboBox fontPicker;
     JSpinner spinnerFont;
+    UndoManager undoManager;
 
     int WIDTH = 885;
     int HEIGHT = 674;
@@ -39,6 +40,9 @@ public class EditorFrame extends JFrame implements ActionListener{
 		textArea.setWrapStyleWord(true);
 		textArea.setBorder(null);
 		textArea.setFont(new Font("Arial",Font.PLAIN,16));
+
+        undoManager = new UndoManager();
+        textArea.getDocument().addUndoableEditListener(undoManager);
 
         scrollPane = new JScrollPane(textArea);
         scrollPane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
