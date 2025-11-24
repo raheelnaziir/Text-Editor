@@ -57,7 +57,11 @@ public class EditorFrame extends JFrame implements ActionListener{
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
+
+
+        if(e.getSource()==fontPicker) {
+            textArea.setFont(new Font((String)fontPicker.getSelectedItem(),Font.PLAIN,textArea.getFont().getSize()));
+        }
 		
 	}
 
