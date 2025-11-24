@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JMenuBar;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -24,6 +25,7 @@ public class EditorFrame extends JFrame implements ActionListener{
     JComboBox fontPicker;
     JSpinner spinnerFont;
     UndoManager undoManager;
+    JMenuBar menuBar;
 
     int WIDTH = 885;
     int HEIGHT = 674;
@@ -75,10 +77,13 @@ public class EditorFrame extends JFrame implements ActionListener{
         fontPicker.addActionListener(this);
         fontPicker.setBackground(Color.WHITE);
         fontPicker.setSelectedItem("Arial");
+        
+        menuBar = new JMenuBar();
+		menuBar.setBackground(null);
 
         this.add(scrollPane);
         this.setVisible(true);
-
+        this.setJMenuBar(menuBar);
     }
 
 	@Override
