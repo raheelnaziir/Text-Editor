@@ -91,6 +91,11 @@ public class EditorFrame extends JFrame implements ActionListener{
         exitFile = new JMenuItem("     Exit            ");
         newFileItem = new JMenuItem("    New File    ");
 
+        openFile.addActionListener(this);
+        saveFile.addActionListener(this);
+        exitFile.addActionListener(this);
+        newFileItem.addActionListener(this);
+
         this.add(scrollPane);
         this.setVisible(true);
         this.setJMenuBar(menuBar);
