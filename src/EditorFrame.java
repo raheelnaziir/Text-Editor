@@ -27,6 +27,10 @@ public class EditorFrame extends JFrame implements ActionListener{
     UndoManager undoManager;
     JMenuBar menuBar;
 
+    JMenuItem openFile,saveFile, exitFile;
+    JMenuItem copyItem,pasteItem,cutItem,undoItem,findItem,selectAllItem,delItem, redoItem, newFileItem,colorItem, fontItem, fontSize;
+
+
     int WIDTH = 885;
     int HEIGHT = 674;
     String []fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
@@ -80,6 +84,12 @@ public class EditorFrame extends JFrame implements ActionListener{
         
         menuBar = new JMenuBar();
 		menuBar.setBackground(null);
+
+        fileMenu = new JMenu("File");
+        openFile = new JMenuItem("     Open...            ");
+        saveFile = new JMenuItem("     Save As            ");
+        exitFile = new JMenuItem("     Exit            ");
+        newFileItem = new JMenuItem("    New File    ");
 
         this.add(scrollPane);
         this.setVisible(true);
