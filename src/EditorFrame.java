@@ -9,7 +9,9 @@ import java.awt.event.ActionListener;
 import javax.swing.ImageIcon;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
+import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JMenuItem;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -26,7 +28,7 @@ public class EditorFrame extends JFrame implements ActionListener{
     JSpinner spinnerFont;
     UndoManager undoManager;
     JMenuBar menuBar;
-
+    JMenu fileMenu, fileEdit,formatItem;
     JMenuItem openFile,saveFile, exitFile;
     JMenuItem copyItem,pasteItem,cutItem,undoItem,findItem,selectAllItem,delItem, redoItem, newFileItem,colorItem, fontItem, fontSize;
 
