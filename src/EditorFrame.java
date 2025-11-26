@@ -103,6 +103,36 @@ public class EditorFrame extends JFrame implements ActionListener{
 		fileMenu.add(openFile);
 		fileMenu.add(saveFile);
 		fileMenu.add(exitFile);
+		
+		fileEdit  = new JMenu("Edit");
+		
+		copyItem = new JMenuItem("     Copy                           Ctrl C");
+		cutItem = new JMenuItem("     Cut                              Ctrl X");
+		pasteItem = new JMenuItem("     Paste                          Ctrl V");
+		findItem = new JMenuItem("     Find...       	                  Ctrl F");
+		selectAllItem = new JMenuItem("     Select All                   Ctrl A");
+		delItem = new JMenuItem("     Delete All");
+		undoItem = new JMenuItem("     Undo                           Ctrl Z");
+		redoItem = new JMenuItem("     Redo                           Ctrl Y");
+		
+		
+		undoItem.addActionListener(this);
+		redoItem.addActionListener(this);
+		copyItem.addActionListener(this);
+		cutItem.addActionListener(this);
+		findItem.addActionListener(this);
+		selectAllItem.addActionListener(this);
+		delItem.addActionListener(this);
+		
+
+		fileEdit.add(undoItem);
+		fileEdit.add(redoItem);
+		fileEdit.add(copyItem);
+		fileEdit.add(cutItem);
+		fileEdit.add(delItem);
+		fileEdit.add(findItem);
+		fileEdit.add(selectAllItem);
+		fileEdit.add(pasteItem);
 
         this.add(scrollPane);
         this.setVisible(true);
