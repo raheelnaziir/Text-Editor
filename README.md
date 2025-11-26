@@ -46,4 +46,4 @@ This project replicates basic Notepad functionality with added features for edit
 Clone the repository:
 
 ```bash
-git clone https://github.com/<your-username>/<repo-name>.git
+https://github.com/raheelnaziir/Text-Editor.git
