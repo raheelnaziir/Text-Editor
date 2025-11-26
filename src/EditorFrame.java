@@ -98,6 +98,11 @@ public class EditorFrame extends JFrame implements ActionListener{
         saveFile.addActionListener(this);
         exitFile.addActionListener(this);
         newFileItem.addActionListener(this);
+        
+        fileMenu.add(newFileItem);
+		fileMenu.add(openFile);
+		fileMenu.add(saveFile);
+		fileMenu.add(exitFile);
 
         this.add(scrollPane);
         this.setVisible(true);
