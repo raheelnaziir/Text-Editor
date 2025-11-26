@@ -250,6 +250,39 @@ public class EditorFrame extends JFrame implements ActionListener{
 			textArea.paste();
 		}
 		
+		if(e.getSource()==newFileItem) {
+			
+			int response = JOptionPane.showConfirmDialog(this, "Save this file?");
+			
+			if(response == JOptionPane.YES_OPTION) {
+				save();
+				this.dispose();
+				new EditorFrame();
+			} if(response == JOptionPane.NO_OPTION) {
+				
+				this.dispose();
+				new EditorFrame();
+			}
+			
+		}
+		
+		if(e.getSource()==fontItem) {
+			JOptionPane.showMessageDialog(null, fontPicker);
+		} 
+		
+		if(e.getSource()==fontSize) {
+			JOptionPane.showMessageDialog(null, spinnerFont);
+		}
+		
+		if(e.getSource()==findItem) {
+			String searchWord = JOptionPane.showInputDialog(null, "Enter ");
+			
+			if(!searchWord.isEmpty()) {
+				searchAndHighlight(searchWord);
+			}
+			
+		} 
+		
 	}
 	
 	void save() {
