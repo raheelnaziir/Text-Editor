@@ -27,6 +27,9 @@ import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.DefaultHighlighter;
+import javax.swing.text.Highlighter;
 import javax.swing.undo.UndoManager;
 
 public class EditorFrame extends JFrame implements ActionListener{
@@ -285,6 +288,18 @@ public class EditorFrame extends JFrame implements ActionListener{
 		
 	}
 	
+	public void undo() {
+		if(undoManager.canUndo()) {
+				undoManager.undo();
+		}
+	}
+	
+	public void redo() {
+		if(undoManager.canRedo()) {
+			undoManager.redo();
+		}
+	}
+	
 	void save() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File("."));
@@ -308,6 +323,31 @@ public class EditorFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
+	
+	private void searchAndHighlight(String word) {
+        String text = textArea.getText();
+        int startIndex = text.indexOf(word);
+
+        if (startIndex >= 0) {
+            try {
+                // Highlight the found word
+                Highlighter highlighter = textArea.getHighlighter();
+                highlighter.removeAllHighlights();
+                
+                highlighter.addHighlight(startIndex, startIndex + word.length(), new DefaultHighlighter.DefaultHighlightPainter(Color.YELLOW));
+                
+                textArea.setCaretPosition(startIndex); // move the cursor to the start of the word
+                
+                JOptionPane.showMessageDialog(this, "Word found!");
+                            } catch (BadLocationException ex) {
+                ex.printStackTrace();
+            }
+            
+        } else {
+            JOptionPane.showMessageDialog(this, "Word not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        }
+        
+    }
 
 
 
