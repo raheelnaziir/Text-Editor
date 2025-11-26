@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.PrintWriter;
 import java.util.Scanner;
 
 import javax.swing.ImageIcon;
@@ -18,6 +19,7 @@ import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -209,8 +211,48 @@ public class EditorFrame extends JFrame implements ActionListener{
 				}
 			}
 		}
+        
+        if(e.getSource() == saveFile) {
+			save();
+		}
+        
+		if(e.getSource() == exitFile) {
+			int response = JOptionPane.showConfirmDialog(this, "save this file?");
+			
+			if(response == JOptionPane.NO_OPTION) {
+				System.exit(0);
+			} if(response == JOptionPane.YES_OPTION) {
+				save();
+			}
+			
+		}
 		
 	}
+	
+	void save() {
+		JFileChooser fileChooser = new JFileChooser();
+		fileChooser.setCurrentDirectory(new File("."));
+		
+		int response = fileChooser.showSaveDialog(null);
+		
+		if(response == JFileChooser.APPROVE_OPTION) {
+			File file;
+			PrintWriter fileOut = null;
+			
+			file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+			try {
+				fileOut = new PrintWriter(file);
+				fileOut.println(textArea.getText());
+			} catch (FileNotFoundException e1) {
+				
+				e1.printStackTrace();
+			}
+			finally {
+				fileOut.close();
+			}
+		}
+	}
+
 
 
 
