@@ -10,10 +10,12 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.util.Scanner;
+import java.util.Timer;
 
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
+import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -24,6 +26,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.filechooser.FileNameExtensionFilter;
@@ -103,7 +106,7 @@ public class EditorFrame extends JFrame implements ActionListener{
         openFile = new JMenuItem("     Open...            ");
         saveFile = new JMenuItem("     Save As            ");
         exitFile = new JMenuItem("     Exit            ");
-        newFileItem = new JMenuItem("    New File    ");
+        newFileItem = new JMenuItem("     New File     ");
 
         openFile.addActionListener(this);
         saveFile.addActionListener(this);
@@ -170,6 +173,7 @@ public class EditorFrame extends JFrame implements ActionListener{
 
 
 		if(e.getSource() == colorItem) {
+			
 			JColorChooser colorChooser = new JColorChooser();
 			Color color = colorChooser.showDialog(null, "Choose color",Color.black);
 			textArea.setForeground(color);
@@ -220,6 +224,7 @@ public class EditorFrame extends JFrame implements ActionListener{
 		}
         
 		if(e.getSource() == exitFile) {
+			
 			int response = JOptionPane.showConfirmDialog(this, "save this file?");
 			
 			if(response == JOptionPane.NO_OPTION) {
@@ -323,6 +328,7 @@ public class EditorFrame extends JFrame implements ActionListener{
 			}
 		}
 	}
+
 	
 	private void searchAndHighlight(String word) {
         String text = textArea.getText();
@@ -348,8 +354,7 @@ public class EditorFrame extends JFrame implements ActionListener{
         }
         
     }
-
-
+	
 
 
 
