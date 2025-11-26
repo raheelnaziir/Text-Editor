@@ -133,6 +133,21 @@ public class EditorFrame extends JFrame implements ActionListener{
 		fileEdit.add(findItem);
 		fileEdit.add(selectAllItem);
 		fileEdit.add(pasteItem);
+		
+		formatItem = new JMenu("Format");
+		
+		colorItem = new JMenuItem("     Color     ");
+		colorItem.addActionListener(this);
+
+		fontItem = new JMenuItem("     Font..");
+		fontItem.addActionListener(this);
+		
+		fontSize = new JMenuItem("     Size");
+		fontSize.addActionListener(this);
+		
+		formatItem.add(fontSize);
+		formatItem.add(colorItem);
+		formatItem.add(fontItem);
 
         this.add(scrollPane);
         this.setVisible(true);
