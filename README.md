@@ -47,3 +47,10 @@ Clone the repository:
 
 ```bash
 https://github.com/raheelnaziir/Text-Editor.git
+
+Compile and run:
+
+javac EditorFrame.java
+java EditorFrame
+
+Or open the project in a Java IDE (Eclipse, IntelliJ, NetBeans).
