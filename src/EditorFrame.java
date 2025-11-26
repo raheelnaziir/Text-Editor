@@ -6,10 +6,14 @@ import java.awt.Font;
 import java.awt.GraphicsEnvironment;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
@@ -20,6 +24,7 @@ import javax.swing.JTextArea;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import javax.swing.undo.UndoManager;
 
 public class EditorFrame extends JFrame implements ActionListener{
@@ -160,7 +165,7 @@ public class EditorFrame extends JFrame implements ActionListener{
 
 
 		if(e.getSource() == colorItem) {
-			 JColorChooser colorChooser = new JColorChooser();
+			JColorChooser colorChooser = new JColorChooser();
 			Color color = colorChooser.showDialog(null, "Choose color",Color.black);
 			textArea.setForeground(color);
 		}
@@ -169,6 +174,41 @@ public class EditorFrame extends JFrame implements ActionListener{
         if(e.getSource()==fontPicker) {
             textArea.setFont(new Font((String)fontPicker.getSelectedItem(),Font.PLAIN,textArea.getFont().getSize()));
         }
+        
+        if(e.getSource()==fontPicker) {
+			textArea.setFont(new Font((String)fontPicker.getSelectedItem(),Font.PLAIN,textArea.getFont().getSize()));
+		}
+        
+        if(e.getSource() == openFile) {
+			
+			JFileChooser fileChooser = new JFileChooser();
+			fileChooser.setCurrentDirectory(new File("."));
+			
+			FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files","txt");
+			fileChooser.setFileFilter(filter);
+			
+			int response = fileChooser.showOpenDialog(null);
+			
+			if(response == JFileChooser.APPROVE_OPTION) {
+				File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+				Scanner fileIn = null;
+				
+				try {
+					fileIn = new Scanner(file);
+					if(file.isFile()) {
+						while(fileIn.hasNextLine()) {
+							String line = fileIn.nextLine() + "\n";
+							textArea.append(line);
+						}
+					}
+				} catch (FileNotFoundException e1) {
+					e1.printStackTrace();
+				}
+				finally {
+					fileIn.close();
+				}
+			}
+		}
 		
 	}
 
