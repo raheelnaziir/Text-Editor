@@ -1,3 +1,4 @@
+import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -31,7 +32,7 @@ public class EditorFrame extends JFrame implements ActionListener{
     JMenu fileMenu, fileEdit,formatItem;
     JMenuItem openFile,saveFile, exitFile;
     JMenuItem copyItem,pasteItem,cutItem,undoItem,findItem,selectAllItem,delItem, redoItem, newFileItem,colorItem, fontItem, fontSize;
-
+    String userInput;
 
     int WIDTH = 885;
     int HEIGHT = 674;
@@ -45,8 +46,8 @@ public class EditorFrame extends JFrame implements ActionListener{
         this.setBackground(Color.white);
         this.setSize(900,660);
         this.getContentPane().setBackground(Color.white);
-        this.setResizable(false);
-        this.setLayout(new FlowLayout());
+        this.setResizable(true);
+        this.setLayout(new BorderLayout());
         this.setLocationRelativeTo(null);
         this.setIconImage(icon.getImage());
 
