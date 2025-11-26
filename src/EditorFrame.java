@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
 import javax.swing.ImageIcon;
+import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -158,6 +159,13 @@ public class EditorFrame extends JFrame implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 
 
+		if(e.getSource() == colorItem) {
+			 JColorChooser colorChooser = new JColorChooser();
+			Color color = colorChooser.showDialog(null, "Choose color",Color.black);
+			textArea.setForeground(color);
+		}
+		
+		
         if(e.getSource()==fontPicker) {
             textArea.setFont(new Font((String)fontPicker.getSelectedItem(),Font.PLAIN,textArea.getFont().getSize()));
         }
