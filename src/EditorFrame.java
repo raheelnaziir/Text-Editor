@@ -227,6 +227,29 @@ public class EditorFrame extends JFrame implements ActionListener{
 			
 		}
 		
+		if(e.getSource()==delItem) {
+			textArea.setText("");
+		}
+		
+		if(e.getSource()==copyItem) {
+			textArea.selectAll();
+			textArea.copy();
+		}
+		
+		if(e.getSource()==selectAllItem) {
+			textArea.selectAll();
+		}
+		
+		if(e.getSource()==cutItem) {
+			textArea.selectAll();
+			textArea.copy();
+			textArea.setText("");
+		}
+		
+		if(e.getSource()==pasteItem ) {
+			textArea.paste();
+		}
+		
 	}
 	
 	void save() {
