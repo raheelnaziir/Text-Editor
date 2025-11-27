@@ -56,7 +56,7 @@ public class EditorFrame extends JFrame implements ActionListener{
 
     EditorFrame() {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setTitle("  Notepad");
+        this.setTitle("  Untitled - Notepad");
         this.setBackground(Color.white);
         this.setSize(900,660);
         this.getContentPane().setBackground(Color.white);
@@ -162,6 +162,10 @@ public class EditorFrame extends JFrame implements ActionListener{
 		formatItem.add(fontSize);
 		formatItem.add(colorItem);
 		formatItem.add(fontItem);
+		
+		menuBar.add(fileMenu);
+		menuBar.add(fileEdit);
+		menuBar.add(formatItem);
 
         this.add(scrollPane);
         this.setVisible(true);
@@ -209,7 +213,10 @@ public class EditorFrame extends JFrame implements ActionListener{
 							String line = fileIn.nextLine() + "\n";
 							textArea.append(line);
 						}
+							
 					}
+					setTitle(file.getName() + " - Notepad");
+					
 				} catch (FileNotFoundException e1) {
 					e1.printStackTrace();
 				}
@@ -315,10 +322,14 @@ public class EditorFrame extends JFrame implements ActionListener{
 			File file;
 			PrintWriter fileOut = null;
 			
-			file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+			file = new File(fileChooser.getSelectedFile().getAbsolutePath() + ".txt");
 			try {
 				fileOut = new PrintWriter(file);
 				fileOut.println(textArea.getText());
+				
+				setTitle(file.getName() + " - Notepad");
+				
+				JOptionPane.showMessageDialog(this, "File saved successfully.");
 			} catch (FileNotFoundException e1) {
 				
 				e1.printStackTrace();
