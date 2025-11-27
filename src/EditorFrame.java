@@ -55,6 +55,7 @@ public class EditorFrame extends JFrame implements ActionListener{
     ImageIcon icon = new ImageIcon("notepad.png");
 
     EditorFrame() {
+    	
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setTitle("  Untitled - Notepad");
         this.setBackground(Color.white);
@@ -330,6 +331,7 @@ public class EditorFrame extends JFrame implements ActionListener{
 				setTitle(file.getName() + " - Notepad");
 				
 				JOptionPane.showMessageDialog(this, "File saved successfully.");
+				
 			} catch (FileNotFoundException e1) {
 				
 				e1.printStackTrace();
