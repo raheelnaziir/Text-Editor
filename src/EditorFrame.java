@@ -188,6 +188,10 @@ public class EditorFrame extends JFrame implements ActionListener{
         this.add(scrollPane);
         this.setVisible(true);
         this.setJMenuBar(menuBar);
+        
+        
+     // Ensure DB table exists (attempt to create if missing)
+        ensureTableExists();
     }
 
 	@Override
