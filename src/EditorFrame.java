@@ -15,16 +15,21 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Timestamp;
 import java.sql.Types;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 import java.util.Timer;
 
+import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JColorChooser;
 import javax.swing.JComboBox;
 import javax.swing.JDialog;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.JList;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
@@ -267,21 +272,24 @@ public class EditorFrame extends JFrame implements ActionListener{
 			textArea.paste();
 		}
 		
-		if(e.getSource()==newFileItem) {
-			
-			int response = JOptionPane.showConfirmDialog(this, "Save this file?");
-			
-			if(response == JOptionPane.YES_OPTION) {
-				save();
-				this.dispose();
-				new EditorFrame();
-			} if(response == JOptionPane.NO_OPTION) {
-				
-				this.dispose();
-				new EditorFrame();
-			}
-			
-		}
+		 if (e.getSource() == newFileItem) {
+	            int response = JOptionPane.showConfirmDialog(this, "Save this file?");
+	            if (response == JOptionPane.YES_OPTION) {
+	                Object[] options = { "Disk", "Database" };
+	                int choice = JOptionPane.showOptionDialog(this, "Save to:", "Save", JOptionPane.YES_NO_OPTION,
+	                        JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+	                if (choice == JOptionPane.YES_OPTION) saveToDisk();
+	                else if (choice == JOptionPane.NO_OPTION) saveToDatabaseWithPasswordPrompt();
+
+	                this.dispose();
+	                new EditorFrame();
+	            }
+	            if (response == JOptionPane.NO_OPTION) {
+	                this.dispose();
+	                new EditorFrame();
+	            }
+	        }
 		
 		if(e.getSource()==fontItem) {
 			JOptionPane.showMessageDialog(null, fontPicker);
@@ -430,6 +438,105 @@ public class EditorFrame extends JFrame implements ActionListener{
         } catch (SQLException ex) {
             ex.printStackTrace();
             JOptionPane.showMessageDialog(this, "Error saving to database:\n" + ex.getMessage(), "DB Error", JOptionPane.ERROR_MESSAGE);
+        }
+    }
+    
+    void openFromDatabase() {
+        String q = "SELECT id, name, modified_at, password FROM files ORDER BY modified_at DESC";
+        List<Integer> ids = new ArrayList<>();
+        DefaultListModel<String> model = new DefaultListModel<>();
+        List<Boolean> locked = new ArrayList<>();
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+                PreparedStatement ps = conn.prepareStatement(q);
+                ResultSet rs = ps.executeQuery()) {
+            while (rs.next()) {
+                int id = rs.getInt("id");
+                String name = rs.getString("name");
+                Timestamp ts = rs.getTimestamp("modified_at");
+                String ph = rs.getString("password");
+                boolean isLocked = ph != null && !ph.trim().isEmpty();
+                String label = id + " - " + name + (isLocked ? " (locked)" : "") + " (" + ts + ")";
+                ids.add(id);
+                model.addElement(label);
+                locked.add(isLocked);
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error reading database:\n" + ex.getMessage(), "DB Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (model.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "No files found in database.");
+            return;
+        }
+
+        JList<String> list = new JList<>(model);
+        list.setVisibleRowCount(10);
+        int option = JOptionPane.showConfirmDialog(this, new JScrollPane(list), "Select file to open", JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (option != JOptionPane.OK_OPTION) return;
+        int idx = list.getSelectedIndex();
+        if (idx < 0) return;
+        int idToOpen = ids.get(idx);
+        boolean isLocked = locked.get(idx);
+
+        // If locked, prompt for password and verify against password_hash
+        if (isLocked) {
+        	// retrieve stored plain password
+        	String fetchPwd = "SELECT password FROM files WHERE id = ?";
+        	try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+        	     PreparedStatement phStmt = conn.prepareStatement(fetchPwd)) {
+        	    phStmt.setInt(1, idToOpen);
+
+        	    try (ResultSet rs = phStmt.executeQuery()) {
+        	        if (rs.next()) {
+        	            String storedPwd = rs.getString("password");
+
+        	            char[] provided = promptForPassword("Enter password to open file:");
+        	            if (provided == null) {
+        	                JOptionPane.showMessageDialog(this, "Open cancelled.");
+        	                return;
+        	            }
+        	            String providedPwd = new String(provided);
+        	            java.util.Arrays.fill(provided, '0'); // clear memory
+
+        	            if (!providedPwd.equals(storedPwd)) {
+        	                JOptionPane.showMessageDialog(this, "Incorrect password.", "Access denied", JOptionPane.ERROR_MESSAGE);
+        	                return;
+        	            }
+
+        	            // correct password → continue loading content
+        	        } else {
+        	            JOptionPane.showMessageDialog(this, "File not found.", "Error", JOptionPane.ERROR_MESSAGE);
+        	            return;
+        	        }
+        	    }
+
+        	} catch (SQLException ex) {
+        	    ex.printStackTrace();
+        	    JOptionPane.showMessageDialog(this, "Error verifying password:\n" + ex.getMessage(), "DB Error", JOptionPane.ERROR_MESSAGE);
+        	    return;
+        	}
+
+        }
+
+        // Load content
+        String q2 = "SELECT name, content FROM files WHERE id = ?";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+                PreparedStatement ps = conn.prepareStatement(q2)) {
+            ps.setInt(1, idToOpen);
+            try (ResultSet rs = ps.executeQuery()) {
+                if (rs.next()) {
+                    String name = rs.getString("name");
+                    String content = rs.getString("content");
+                    textArea.setText(content != null ? content : "");
+                    setTitle(name + " - Notepad");
+                    JOptionPane.showMessageDialog(this, "Loaded from database (id: " + idToOpen + ").");
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error loading file:\n" + ex.getMessage(), "DB Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
