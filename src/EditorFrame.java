@@ -306,6 +306,27 @@ public class EditorFrame extends JFrame implements ActionListener{
 		}
 	}
 	
+	void saveToDisk() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("."));
+        int response = fileChooser.showSaveDialog(null);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            File file;
+            PrintWriter fileOut = null;
+            file = new File(fileChooser.getSelectedFile().getAbsolutePath() + ".txt");
+            try {
+                fileOut = new PrintWriter(file);
+                fileOut.println(textArea.getText());
+                setTitle(file.getName() + " - Notepad");
+                JOptionPane.showMessageDialog(this, "File saved successfully.");
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            } finally {
+                if (fileOut != null) fileOut.close();
+            }
+        }
+    }
+	
 	void save() {
 		JFileChooser fileChooser = new JFileChooser();
 		fileChooser.setCurrentDirectory(new File("."));
