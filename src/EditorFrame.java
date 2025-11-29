@@ -197,43 +197,29 @@ public class EditorFrame extends JFrame implements ActionListener{
 			textArea.setFont(new Font((String)fontPicker.getSelectedItem(),Font.PLAIN,textArea.getFont().getSize()));
 		}
         
-        if(e.getSource() == openFile) {
-			
-			JFileChooser fileChooser = new JFileChooser();
-			fileChooser.setCurrentDirectory(new File("."));
-			
-			FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files","txt");
-			fileChooser.setFileFilter(filter);
-			
-			int response = fileChooser.showOpenDialog(null);
-			
-			if(response == JFileChooser.APPROVE_OPTION) {
-				File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
-				Scanner fileIn = null;
-				
-				try {
-					fileIn = new Scanner(file);
-					if(file.isFile()) {
-						while(fileIn.hasNextLine()) {
-							String line = fileIn.nextLine() + "\n";
-							textArea.append(line);
-						}
-							
-					}
-					setTitle(file.getName() + " - Notepad");
-					
-				} catch (FileNotFoundException e1) {
-					e1.printStackTrace();
-				}
-				finally {
-					fileIn.close();
-				}
-			}
-		}
+        if (e.getSource() == openFile) {
+            Object[] options = { "Disk", "Database" };
+            int choice = JOptionPane.showOptionDialog(this, "Open from:", "Open", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+            if (choice == JOptionPane.YES_OPTION) {
+                openFromDisk();
+            } else if (choice == JOptionPane.NO_OPTION) {
+                openFromDatabase();
+            }
+        }
         
-        if(e.getSource() == saveFile) {
-			save();
-		}
+        if (e.getSource() == saveFile) {
+            Object[] options = { "Disk", "Database" };
+            int choice = JOptionPane.showOptionDialog(this, "Save to:", "Save", JOptionPane.YES_NO_OPTION,
+                    JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+            if (choice == JOptionPane.YES_OPTION) {
+                saveToDisk();
+            } else if (choice == JOptionPane.NO_OPTION) {
+                saveToDatabaseWithPasswordPrompt();
+            }
+        }
         
 		if(e.getSource() == exitFile) {
 			
