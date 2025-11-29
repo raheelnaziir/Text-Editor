@@ -53,6 +53,10 @@ public class EditorFrame extends JFrame implements ActionListener{
     String []fonts = GraphicsEnvironment.getLocalGraphicsEnvironment().getAvailableFontFamilyNames();
 
     ImageIcon icon = new ImageIcon("notepad.png");
+    
+    static final String DB_URL = "jdbc:mysql://localhost:3306/textEditorDB?useSSL=false&serverTimezone=UTC";
+    static final String DB_USER = "root";
+    static final String DB_PASS = "54513";
 
     EditorFrame() {
     	
