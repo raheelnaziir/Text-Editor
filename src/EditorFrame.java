@@ -221,17 +221,20 @@ public class EditorFrame extends JFrame implements ActionListener{
             }
         }
         
-		if(e.getSource() == exitFile) {
-			
-			int response = JOptionPane.showConfirmDialog(this, "save this file?");
-			
-			if(response == JOptionPane.NO_OPTION) {
-				System.exit(0);
-			} if(response == JOptionPane.YES_OPTION) {
-				save();
-			}
-			
-		}
+        if (e.getSource() == exitFile) {
+            int response = JOptionPane.showConfirmDialog(this, "save this file?");
+            if (response == JOptionPane.NO_OPTION) {
+                System.exit(0);
+            }
+            if (response == JOptionPane.YES_OPTION) {
+                Object[] options = { "Disk", "Database" };
+                int choice = JOptionPane.showOptionDialog(this, "Save to:", "Save", JOptionPane.YES_NO_OPTION,
+                        JOptionPane.QUESTION_MESSAGE, null, options, options[0]);
+
+                if (choice == JOptionPane.YES_OPTION) saveToDisk();
+                else if (choice == JOptionPane.NO_OPTION) saveToDatabaseWithPasswordPrompt();
+            }
+        }
 		
 		if(e.getSource()==delItem) {
 			textArea.setText("");
