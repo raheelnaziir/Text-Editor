@@ -326,35 +326,33 @@ public class EditorFrame extends JFrame implements ActionListener{
             }
         }
     }
-	
-	void save() {
-		JFileChooser fileChooser = new JFileChooser();
-		fileChooser.setCurrentDirectory(new File("."));
-		
-		int response = fileChooser.showSaveDialog(null);
-		
-		if(response == JFileChooser.APPROVE_OPTION) {
-			File file;
-			PrintWriter fileOut = null;
-			
-			file = new File(fileChooser.getSelectedFile().getAbsolutePath() + ".txt");
-			try {
-				fileOut = new PrintWriter(file);
-				fileOut.println(textArea.getText());
-				
-				setTitle(file.getName() + " - Notepad");
-				
-				JOptionPane.showMessageDialog(this, "File saved successfully.");
-				
-			} catch (FileNotFoundException e1) {
-				
-				e1.printStackTrace();
-			}
-			finally {
-				fileOut.close();
-			}
-		}
-	}
+
+    void openFromDisk() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File("."));
+        FileNameExtensionFilter filter = new FileNameExtensionFilter("Text files", "txt");
+        fileChooser.setFileFilter(filter);
+        int response = fileChooser.showOpenDialog(null);
+        if (response == JFileChooser.APPROVE_OPTION) {
+            File file = new File(fileChooser.getSelectedFile().getAbsolutePath());
+            Scanner fileIn = null;
+            try {
+                fileIn = new Scanner(file);
+                if (file.isFile()) {
+                    textArea.setText("");
+                    while (fileIn.hasNextLine()) {
+                        String line = fileIn.nextLine() + "\n";
+                        textArea.append(line);
+                    }
+                }
+                setTitle(file.getName() + " - Notepad");
+            } catch (FileNotFoundException e1) {
+                e1.printStackTrace();
+            } finally {
+                if (fileIn != null) fileIn.close();
+            }
+        }
+    }
 
 	
 	private void searchAndHighlight(String word) {
