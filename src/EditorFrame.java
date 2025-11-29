@@ -11,8 +11,11 @@ import java.io.FileNotFoundException;
 import java.io.PrintWriter;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.sql.Types;
 import java.util.Scanner;
 import java.util.Timer;
 
@@ -26,6 +29,7 @@ import javax.swing.JMenu;
 import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
+import javax.swing.JPasswordField;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextArea;
@@ -373,6 +377,59 @@ public class EditorFrame extends JFrame implements ActionListener{
             st.execute(createSQL);
         } catch (SQLException ex) {
             System.err.println("Warning: could not ensure table exists: " + ex.getMessage());
+        }
+    }
+    
+    // ask for password (JPasswordField) and return char[] or null if cancelled
+    private char[] promptForPassword(String prompt) {
+        JPasswordField pwd = new JPasswordField();
+        int option = JOptionPane.showConfirmDialog(this, pwd, prompt, JOptionPane.OK_CANCEL_OPTION, JOptionPane.PLAIN_MESSAGE);
+        if (option == JOptionPane.OK_OPTION) {
+            return pwd.getPassword();
+        }
+        return null;
+    }
+    
+    void saveToDatabaseWithPasswordPrompt() {
+        String content = textArea.getText();
+        if (content == null) content = "";
+        String defaultName = getTitle().trim();
+        if (defaultName.isEmpty() || defaultName.startsWith("Untitled")) defaultName = "Untitled";
+        String name = JOptionPane.showInputDialog(this, "Enter filename to save in DB:", defaultName);
+        if (name == null) return; // cancelled
+
+        int protect = JOptionPane.showConfirmDialog(this, "Protect this file with a password?", "Password", JOptionPane.YES_NO_OPTION);
+        String passwordPlain = null;
+        if (protect == JOptionPane.YES_OPTION) {
+            char[] pwd = promptForPassword("Enter password:");
+            if (pwd == null) {
+                JOptionPane.showMessageDialog(this, "Save cancelled.");
+                return;
+            }
+            passwordPlain = new String(pwd);
+            java.util.Arrays.fill(pwd, '0'); // clear char[]
+        }
+
+        String insertSQL = "INSERT INTO files (name, content, password) VALUES (?, ?, ?)";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             PreparedStatement ps = conn.prepareStatement(insertSQL, Statement.RETURN_GENERATED_KEYS)) {
+            ps.setString(1, name);
+            ps.setString(2, content);
+            if (passwordPlain != null) ps.setString(3, passwordPlain);
+            else ps.setNull(3, Types.VARCHAR);
+            ps.executeUpdate();
+            try (ResultSet rs = ps.getGeneratedKeys()) {
+                if (rs.next()) {
+                    int id = rs.getInt(1);
+                    setTitle(name + " - Notepad");
+                    JOptionPane.showMessageDialog(this, "Saved to database (id: " + id + ").");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Saved to database.");
+                }
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+            JOptionPane.showMessageDialog(this, "Error saving to database:\n" + ex.getMessage(), "DB Error", JOptionPane.ERROR_MESSAGE);
         }
     }
 
