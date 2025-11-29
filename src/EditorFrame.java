@@ -354,6 +354,24 @@ public class EditorFrame extends JFrame implements ActionListener{
         }
     }
 
+    // -------- MySQL integration methods with password protection --------
+    void ensureTableExists() {
+        String createSQL = "CREATE TABLE IF NOT EXISTS files ("
+                + "id INT AUTO_INCREMENT PRIMARY KEY,"
+                + "name VARCHAR(255),"
+                + "content LONGTEXT,"
+                + "password VARCHAR(128),"
+                + "created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+                + "modified_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP"
+                + ") ENGINE=InnoDB;";
+        try (Connection conn = DriverManager.getConnection(DB_URL, DB_USER, DB_PASS);
+             Statement st = conn.createStatement()) {
+            st.execute(createSQL);
+        } catch (SQLException ex) {
+            System.err.println("Warning: could not ensure table exists: " + ex.getMessage());
+        }
+    }
+
 	
 	private void searchAndHighlight(String word) {
         String text = textArea.getText();
